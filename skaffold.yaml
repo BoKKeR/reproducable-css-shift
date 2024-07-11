@@ -1,0 +1,45 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: iam-ap-app
+build:
+  local:
+    push: false
+    useDockerCLI: true
+  artifacts:
+    - image: iam-ap-root
+      context: iam-ap-root
+      docker:
+        dockerfile: DockerfileDev
+    - image: iam-ap-sidebar
+      context: iam-ap-sidebar
+      docker:
+        dockerfile: DockerfileDev
+profiles:
+  - name: production
+    patches:
+      - op: replace
+        path: /build/artifacts/0/docker/dockerfile
+        value: Dockerfile
+      - op: replace
+        path: /build/artifacts/1/docker/dockerfile
+        value: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+      - k8s/iam-ap-root-deployment.yaml
+      - k8s/iam-ap-sidebar-deployment.yaml
+
+portForward:
+- resourceType: deployment
+  resourceName: iam-ap-root
+  namespace: default
+  port: 9000
+  localPort: 9000
+  
+- resourceType: deployment
+  resourceName: iam-ap-sidebar
+  namespace: default
+  port: 9001
+  localPort: 9001
+

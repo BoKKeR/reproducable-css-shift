@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@postnord/iam-ap-sidebar": "http://localhost:9001/spa.js"
+  }
+}

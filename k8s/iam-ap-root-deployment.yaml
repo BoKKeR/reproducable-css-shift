@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iam-ap-root
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iam-ap-root
+  template:
+    metadata:
+      labels:
+        app: iam-ap-root
+    spec:
+      containers:
+        - name: iam-ap-root
+          image: iam-ap-root
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iam-ap-root
+spec:
+  selector:
+    app: iam-ap-root
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000

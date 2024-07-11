@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iam-ap-sidebar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iam-ap-sidebar
+  template:
+    metadata:
+      labels:
+        app: iam-ap-sidebar
+    spec:
+      containers:
+        - name: iam-ap-sidebar
+          image: iam-ap-sidebar
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iam-ap-sidebar
+spec:
+  selector:
+    app: iam-ap-sidebar
+  ports:
+    - protocol: TCP
+      port: 9001
+      targetPort: 9001
