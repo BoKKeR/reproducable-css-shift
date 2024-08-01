@@ -1,28 +1,28 @@
 <script lang="ts" setup>
-import type { PropType } from 'vue';
+import type { PropType } from "vue";
 
-import { icons } from '../constants';
+import { icons } from "../constants";
 
 defineProps({
   icon: {
     type: String as PropType<keyof typeof icons>,
-    required: true,
+    required: true
   },
   to: {
     type: String,
-    required: true,
+    required: true
   },
   color: {
     type: String,
-    default: 'black',
+    default: "black"
   },
   active: {
     type: Boolean,
-    required: true,
-  },
+    required: true
+  }
 });
 
-defineEmits(['update:isActive', 'navigate']);
+const emit = defineEmits(["update:isActive", "navigate"]);
 </script>
 
 <template>

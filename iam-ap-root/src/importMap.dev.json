@@ -1,7 +1,6 @@
 {
   "imports": {
     "@postnord/iam-ap-sidebar": "http://localhost:9001/src/spa.ts",
-    "@postnord/iam-ap-access-list": "http://localhost:9002/src/spa.ts",
-    "@postnord/iam-ap-topbar": "http://localhost:9003/src/spa.ts"
+    "@postnord/iam-ap-access-list": "http://localhost:9002/src/spa.ts"
   }
 }

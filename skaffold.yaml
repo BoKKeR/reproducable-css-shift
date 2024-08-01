@@ -11,10 +11,20 @@ build:
       context: iam-ap-root
       docker:
         dockerfile: DockerfileDev
+        buildArgs:
+          NPM_TOKEN: "{{ .NPM_TOKEN }}"
     - image: iam-ap-sidebar
       context: iam-ap-sidebar
       docker:
         dockerfile: DockerfileDev
+        buildArgs:
+          NPM_TOKEN: "{{ .NPM_TOKEN }}"
+    - image: iam-ap-access-list
+      context: iam-ap-access-list
+      docker:
+        dockerfile: DockerfileDev
+        buildArgs:
+          NPM_TOKEN: "{{ .NPM_TOKEN }}"
 profiles:
   - name: production
     patches:
@@ -24,11 +34,15 @@ profiles:
       - op: replace
         path: /build/artifacts/1/docker/dockerfile
         value: Dockerfile
+      - op: replace
+        path: /build/artifacts/1/docker/dockerfile
+        value: Dockerfile
 deploy:
   kubectl:
     manifests:
       - k8s/iam-ap-root-deployment.yaml
       - k8s/iam-ap-sidebar-deployment.yaml
+      - k8s/iam-ap-access-list-deployment.yaml
 
 portForward:
 - resourceType: deployment
@@ -42,5 +56,11 @@ portForward:
   namespace: default
   port: 9001
   localPort: 9001
+
+- resourceType: deployment
+  resourceName: iam-ap-access-list
+  namespace: default
+  port: 9002
+  localPort: 9002
 
 

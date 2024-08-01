@@ -8,12 +8,17 @@ export default function ({ command }: { command: string }) {
     plugins: [
       vue(),
       vitePluginSingleSpa({
-        serverPort: 9001,
+        serverPort: 9002,
         spaEntryPoints: "src/spa.ts",
         type: "mife",
         cssStrategy: "singleMife"
       })
     ],
+    resolve: {
+      alias: {
+        "@/": "./src"
+      }
+    },
     build: {
       cssCodeSplit: true,
       rollupOptions: {
@@ -22,16 +27,13 @@ export default function ({ command }: { command: string }) {
       }
     },
     preview: {
-      port: 9001
+      port: 9002
     },
-    base: command === "build" ? "http://localhost:9001" : "./",
+    base: command === "build" ? "/m/ap-access-list/" : "./",
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `
-          @import "./node_modules/pn-design-assets/pn-assets/styles/_pn-colors.scss";
-          @import "./node_modules/pn-design-assets/pn-assets/styles/_pn-fonts.scss";
-          @import "./node_modules/pn-design-assets/pn-assets/styles/_pn-resets.scss";`
+          additionalData: `@import "./node_modules/pn-design-assets/pn-assets/styles/pn-styles.scss";`
         }
       }
     }
