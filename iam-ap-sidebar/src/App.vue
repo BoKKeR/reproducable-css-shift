@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { watchEffect, ref } from "vue";
-import { storeToRefs } from "pinia";
-import * as singleSpa from "single-spa";
-import NavItem from "./components/NavItem.vue";
-import { useNavStore } from "./stores/nav";
-import { icons } from "./constants";
-import { computed } from "vue";
+import { watchEffect, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import * as singleSpa from 'single-spa';
+import NavItem from './components/NavItem.vue';
+import { useNavStore } from './stores/nav';
+import { icons } from './constants';
+import { computed } from 'vue';
 
 const navStore = useNavStore();
 const { sidebarOpen } = storeToRefs(navStore);
@@ -23,9 +23,9 @@ watchEffect(() => {
   if (!sidebarRef.value) return;
 
   if (sidebarOpen.value) {
-    sidebarRef.value.classList.add("open");
+    sidebarRef.value.classList.add('open');
   } else {
-    sidebarRef.value.classList.remove("open");
+    sidebarRef.value.classList.remove('open');
   }
 });
 
@@ -41,8 +41,8 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { to: "/", icon: "start", label: "Start" },
-  { to: "/access-list", icon: "access_list", label: "Access List" }
+  { to: '/', icon: 'start', label: 'Start' },
+  { to: '/access-list', icon: 'access_list', label: 'Access List' },
 ];
 </script>
 
@@ -54,15 +54,22 @@ const navItems: NavItem[] = [
   >
     <div class="sidebar-header px-4">
       <div class="flex items-center gap-2">
-        <pn-button
-          appearance="light"
-          variant="borderless"
-          small="true"
-          icon='<svg class="pn-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" fill-rule="evenodd" d="M3 7a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1m0 5a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1m0 5a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1" clip-rule="evenodd"/></svg>'
-          :tooltip="sidebarOpen ? 'Close' : 'Open'"
-          type="button"
+        <svg
+          width="24"
+          height="24"
+          class="pn-icon-svg"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
           @click="toggleSidebar"
-        />
+        >
+          <path
+            fill="#000"
+            fill-rule="evenodd"
+            d="M3 7a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1m0 5a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1m0 5a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1"
+            clip-rule="evenodd"
+          />
+        </svg>
         <p v-if="sidebarOpen">Menu</p>
       </div>
     </div>

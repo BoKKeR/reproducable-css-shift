@@ -11,7 +11,9 @@ import ToolsIcon from '../components/icons/ToolsIcon.vue';
 const stepStore = useStepStore();
 
 const descriptionSchema = string().min(1).required('Description is required');
-const valid = computed(() => descriptionSchema.isValidSync(stepStore.accessList.description));
+const valid = computed(() =>
+  descriptionSchema.isValidSync(stepStore.accessList.description)
+);
 
 function updateDescription(event: Event) {
   const target = event.target as HTMLTextAreaElement;
@@ -31,8 +33,9 @@ function updateDescription(event: Event) {
         <section class="top">
           <h3>Introduction</h3>
           <p>
-            If you are setting up an access list for the first time, please read the information below. If you have any
-            questions, feel free to reach out to the Access & Login team.
+            If you are setting up an access list for the first time, please read
+            the information below. If you have any questions, feel free to reach
+            out to the Access & Login team.
           </p>
         </section>
         <section class="center">
@@ -41,9 +44,11 @@ function updateDescription(event: Event) {
             <div class="text">
               <h4>What is an access list?</h4>
               <p>
-                An access list is a list of rules that specifies which users or systems are granted or denied access to
-                a particular object or system resource. The permissions you create in your access list will be added to
-                the user token if the corresponding business rule matches.
+                An access list is a list of rules that specifies which users or
+                systems are granted or denied access to a particular object or
+                system resource. The permissions you create in your access list
+                will be added to the user token if the corresponding business
+                rule matches.
               </p>
             </div>
           </div>
@@ -52,10 +57,12 @@ function updateDescription(event: Event) {
             <div class="text">
               <h4>How does it work?</h4>
               <p>
-                When you receive a request in your service you can verify the token and check the access list property.
-                If this permission is present in the access list property you can allow access to the service. You can
-                add administrators who can maintain this access list after creating the rules. Your access list will
-                need to be approved by an internal team.
+                When you receive a request in your service you can verify the
+                token and check the access list property. If this permission is
+                present in the access list property you can allow access to the
+                service. You can add administrators who can maintain this access
+                list after creating the rules. Your access list will need to be
+                approved by an internal team.
               </p>
             </div>
           </div>
@@ -63,7 +70,7 @@ function updateDescription(event: Event) {
         <section class="description">
           <h3>Description of the access list</h3>
           <p>Describe the purpose of the access list</p>
-          <pn-textarea
+          <textarea
             label="Description"
             placeholder="Descriptive text..."
             rows="5"

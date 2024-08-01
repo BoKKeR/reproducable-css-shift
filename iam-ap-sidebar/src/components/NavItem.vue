@@ -1,34 +1,36 @@
 <script lang="ts" setup>
-import type { PropType } from "vue";
+import type { PropType } from 'vue';
 
-import { icons } from "../constants";
+import { icons } from '../constants';
 
 defineProps({
   icon: {
     type: String as PropType<keyof typeof icons>,
-    required: true
+    required: true,
   },
   to: {
     type: String,
-    required: true
+    required: true,
   },
   color: {
     type: String,
-    default: "black"
+    default: 'black',
   },
   active: {
     type: Boolean,
-    required: true
-  }
+    required: true,
+  },
 });
 
-const emit = defineEmits(["update:isActive", "navigate"]);
+const emit = defineEmits(['update:isActive', 'navigate']);
 </script>
 
 <template>
-  <li :class="['nav-item', { active: $props.active }]">
+  <li
+    :class="['nav-item', { active: $props.active }]"
+    @click="$emit('navigate', to)"
+  >
     <a>
-      <pn-icon :icon="icons[icon]" :color="color" />
       <span><slot /></span>
     </a>
   </li>
@@ -36,8 +38,8 @@ const emit = defineEmits(["update:isActive", "navigate"]);
 
 <style lang="scss" scoped>
 .nav-item.active > a {
-  background-color: $blue50;
-  border-left-color: $blue700;
+  background-color: lightblue;
+  border-left-color: blue;
 }
 
 .nav-item > a {
@@ -53,8 +55,8 @@ const emit = defineEmits(["update:isActive", "navigate"]);
   border-left: 4px solid transparent;
 
   &:hover {
-    background-color: $blue50;
-    border-left-color: $blue700;
+    background-color: lightblue;
+    border-left-color: blue;
   }
 
   .sidebar:not(.open) & {

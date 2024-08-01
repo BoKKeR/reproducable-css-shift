@@ -8,11 +8,17 @@ defineProps({
 </script>
 
 <template>
-  <div class="divider" :style="{ height: vertical ? '100%' : '1px', width: vertical ? '1px' : '100%' }" />
+  <div
+    class="divider"
+    :style="{
+      height: vertical ? '100%' : '1px',
+      width: vertical ? '1px' : '100%',
+    }"
+  />
 </template>
 
 <style lang="scss" scoped>
 .divider {
-  background-color: $gray50;
+  background-color: lightgray;
 }
 </style>

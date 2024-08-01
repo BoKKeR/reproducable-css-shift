@@ -21,15 +21,20 @@ defineProps({
 
 <template>
   <div class="fact-select" @selectOption="$emit('selectOption', $event)">
-    <pn-select label="Business rule" style="width: 100%" :value="businessRule.fact" :key="businessRuleIndex">
-      <pn-option
+    <select
+      label="Business rule"
+      style="width: 100%"
+      :value="businessRule.fact"
+      :key="businessRuleIndex"
+    >
+      <option
         v-for="(fact, k) in AVAILABLE_FACTS"
         :disabled="!enabledFacts.includes(fact as Fact)"
         :key="k"
         :label="AVAILABLE_FACTS_MAP[fact as keyof typeof AVAILABLE_FACTS_MAP]"
         :value="fact"
-      ></pn-option>
-    </pn-select>
+      ></option>
+    </select>
   </div>
 </template>
 

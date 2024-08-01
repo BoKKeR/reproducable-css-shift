@@ -4,7 +4,6 @@ import { array, object, string } from 'yup';
 
 import ContentCard from '../components/ContentCard.vue';
 import PreviewTile from '../components/PreviewTile.vue';
-import Divider from '../components/Divider.vue';
 
 import { useStepStore } from '../stores';
 
@@ -12,15 +11,20 @@ import type { AccessListResource } from '../types';
 
 const stepStore = useStepStore();
 
-const modalOpen = ref(false);
-const selectedResources = ref<AccessListResource[]>(stepStore.accessList.access_list.resource);
+const selectedResources = ref<AccessListResource[]>(
+  stepStore.accessList.access_list.resource
+);
 
 const maxResources = 2;
 
-const checked = computed(() => (resource: string) => selectedResources.value.some((r) => r.name === resource));
+const checked = computed(
+  () => (resource: string) =>
+    selectedResources.value.some((r) => r.name === resource)
+);
 const numOfChecked = computed(() => selectedResources.value.length);
 const shouldCheckboxBeDisabled = computed(
-  () => (resource: string) => numOfChecked.value >= maxResources && !checked.value(resource),
+  () => (resource: string) =>
+    numOfChecked.value >= maxResources && !checked.value(resource)
 );
 const resourceSchema = array()
   .of(
@@ -28,11 +32,13 @@ const resourceSchema = array()
       name: string().min(1).required('Name is required'),
       description: string(),
       owner: string(),
-    }),
+    })
   )
   .min(1)
   .max(2);
-const valid = computed(() => resourceSchema.isValidSync(stepStore.accessList.access_list.resource));
+const valid = computed(() =>
+  resourceSchema.isValidSync(stepStore.accessList.access_list.resource)
+);
 
 const resources = [
   {
@@ -52,16 +58,14 @@ const resources = [
   },
 ];
 
-function modalActionHandler() {
-  modalOpen.value = false;
-}
-
 function handler(e: Event) {
-  const { value: resource, checked } = e.target as HTMLPnCheckboxElement;
+  const { value: resource, checked } = e.target as any;
   if (checked) {
     selectedResources.value.push(JSON.parse(resource) as AccessListResource);
   } else {
-    selectedResources.value = selectedResources.value.filter((r) => r.name !== JSON.parse(resource).name);
+    selectedResources.value = selectedResources.value.filter(
+      (r) => r.name !== JSON.parse(resource).name
+    );
   }
 
   stepStore.updateAccessList({
@@ -78,29 +82,16 @@ function handler(e: Event) {
   <ContentCard v-model="valid">
     <template #title>3. Select resource</template>
     <template #subtitle
-      >This is the resource where the permission is applicable. You can have one or two resources.</template
+      >This is the resource where the permission is applicable. You can have one
+      or two resources.</template
     >
     <template #default>
-      <pn-modal :open="modalOpen">
-        <div class="new-resource-modal-container">
-          <div class="modal-header">
-            <h1>Create new resource</h1>
-          </div>
-          <div class="modal-content">
-            <pn-input label="Resource name" />
-            <pn-input label="Owner ID" />
-          </div>
-          <Divider />
-          <div class="modal-actions">
-            <pn-button appearance="light" variant="outlined" @click="modalActionHandler"> Cancel </pn-button>
-            <pn-button @click="modalActionHandler"> Create </pn-button>
-          </div>
-        </div>
-      </pn-modal>
       <div class="content">
         <section class="resource-selection">
           <div class="checkboxes">
-            <label for="tiles">{{ numOfChecked }}/{{ maxResources }} resources selected</label>
+            <label for="tiles"
+              >{{ numOfChecked }}/{{ maxResources }} resources selected</label
+            >
             <div class="tiles">
               <pn-checkbox
                 v-for="resource in resources"
@@ -117,16 +108,7 @@ function handler(e: Event) {
             </div>
           </div>
           <div class="resource-action">
-            <pn-button
-              appearance="light"
-              variant="borderless"
-              small="true"
-              icon='<svg class="pn-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" fill-rule="evenodd" d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1" clip-rule="evenodd"/></svg>'
-              left-icon="true"
-              @click="modalOpen = true"
-            >
-              Create new resource
-            </pn-button>
+            <button>Create new resource</button>
           </div>
         </section>
         <PreviewTile />
@@ -155,7 +137,7 @@ function handler(e: Event) {
   gap: 1rem;
 
   label {
-    color: $gray700;
+    color: gray;
   }
 }
 

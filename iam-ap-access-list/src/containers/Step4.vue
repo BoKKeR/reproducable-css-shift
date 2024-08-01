@@ -1,17 +1,14 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useStepStore } from '../stores';
 
 import ContentCard from '../components/ContentCard.vue';
 import PreviewTile from '../components/PreviewTile.vue';
-import Divider from '../components/Divider.vue';
 
 import type { AccessListAction } from '../types';
 import { object, string } from 'yup';
 
 const stepStore = useStepStore();
-
-const modalOpen = ref(false);
 
 const actions = [
   {
@@ -36,20 +33,21 @@ const actions = [
   },
 ];
 
-function modalActionHandler() {
-  modalOpen.value = false;
-}
-
-const checked = computed(() => (action: string) => stepStore.accessList.access_list.action.name === action);
+const checked = computed(
+  () => (action: string) =>
+    stepStore.accessList.access_list.action.name === action
+);
 const actionSchema = object().shape({
   name: string().min(1).required('Name is required'),
   description: string(),
   owner: string(),
 });
-const valid = computed(() => actionSchema.isValidSync(stepStore.accessList.access_list.action));
+const valid = computed(() =>
+  actionSchema.isValidSync(stepStore.accessList.access_list.action)
+);
 
 function handler(e: Event) {
-  const action = (e.target as HTMLPnRadioButtonElement).value;
+  const action = (e.target as any).value;
   stepStore.updateAccessList({
     access_list: {
       system: stepStore.accessList.access_list.system,
@@ -64,53 +62,25 @@ function handler(e: Event) {
   <ContentCard v-model="valid">
     <template #title> 4. Select action </template>
     <template #subtitle
-      >This is the action you perform on the resource if this role is present in the token. For example, “read”, “write”
-      or “admin”.</template
+      >This is the action you perform on the resource if this role is present in
+      the token. For example, “read”, “write” or “admin”.</template
     >
     <template #default>
-      <pn-modal :open="modalOpen">
-        <div class="new-action-modal-container">
-          <div class="modal-header">
-            <h1>Create new action</h1>
-          </div>
-          <div class="modal-content">
-            <pn-input label="Action name" />
-            <pn-input label="Owner" />
-          </div>
-          <Divider />
-          <div class="modal-actions">
-            <pn-button appearance="light" variant="outlined" @click="modalActionHandler"> Cancel </pn-button>
-            <pn-button @click="modalActionHandler"> Create </pn-button>
-          </div>
-        </div>
-      </pn-modal>
       <div class="content">
         <section class="action-selection">
           <div class="tiles">
-            <pn-radio-button
+            <input
               v-for="action in actions"
+              type="radio"
               :key="action.name"
               :label="action.name"
-              name="action"
               :value="JSON.stringify(action)"
-              :helpertext="action.description"
-              :radioid="`${action.name}-action-selection`"
-              tile
               :checked="checked(action.name)"
               @change="handler"
             />
           </div>
           <div class="action">
-            <pn-button
-              appearance="light"
-              variant="borderless"
-              small="true"
-              icon='<svg class="pn-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" fill-rule="evenodd" d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1" clip-rule="evenodd"/></svg>'
-              left-icon="true"
-              @click="modalOpen = true"
-            >
-              Create new action
-            </pn-button>
+            <button>Create new action</button>
           </div>
         </section>
         <PreviewTile />

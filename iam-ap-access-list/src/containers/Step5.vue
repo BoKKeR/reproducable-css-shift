@@ -12,7 +12,6 @@ import OmniChannelIcon from '../components/icons/OmniChannelIcon.vue';
 
 import AzureSelector from '../components/rules/AzureSelector.vue';
 import FactSelector from '../components/rules/FactSelector.vue';
-import ListUsersModal from '../components/modals/ListUsersModal.vue';
 import { array, object, string } from 'yup';
 
 const stepStore = useStepStore();
@@ -38,7 +37,7 @@ const rulesSchema = array()
               .matches(/^(equal|in|contains|greaterThanInclusive)$/)
               .required(),
             value: string().required(),
-          }),
+          })
         ),
         all: array().of(
           object({
@@ -49,41 +48,69 @@ const rulesSchema = array()
               .matches(/^(equal|in|contains|greaterThanInclusive)$/)
               .required(),
             value: string().required(),
-          }),
+          })
         ),
       }),
-    }),
+    })
   )
   .min(1);
-const valid = computed(() => rulesSchema.isValidSync(stepStore.accessList.rules));
+const valid = computed(() =>
+  rulesSchema.isValidSync(stepStore.accessList.rules)
+);
 
-type ChangeEvent = { detail: { label: string; selected: boolean; value: string } };
+type ChangeEvent = {
+  detail: { label: string; selected: boolean; value: string };
+};
 
 function conditionChanged(changed: ChangeEvent, ruleIndex: number) {
   const newKey = changed.detail.value;
   const oldKey = Object.keys(accessList.value.rules[ruleIndex].conditions)[0];
-  const value = accessList.value.rules[ruleIndex].conditions[oldKey as Condition];
+  const value =
+    accessList.value.rules[ruleIndex].conditions[oldKey as Condition];
   delete accessList.value.rules[ruleIndex].conditions[oldKey as Condition];
-  Object.assign(accessList.value.rules[ruleIndex].conditions, { [newKey]: value });
+  Object.assign(accessList.value.rules[ruleIndex].conditions, {
+    [newKey]: value,
+  });
 }
 
-function businessRuleFactChanged(changed: ChangeEvent, ruleIndex: number, conditionIndex: number) {
+function businessRuleFactChanged(
+  changed: ChangeEvent,
+  ruleIndex: number,
+  conditionIndex: number
+) {
   const newFact = changed.detail.value;
   const rule = accessList.value.rules[ruleIndex];
-  Object.assign(rule.conditions[Object.keys(rule.conditions)[0] as Condition]![conditionIndex], { fact: newFact });
+  Object.assign(
+    rule.conditions[Object.keys(rule.conditions)[0] as Condition]![
+      conditionIndex
+    ],
+    { fact: newFact }
+  );
 }
 
-function businessRuleValueChanged(changed: ChangeEvent, ruleIndex: number, conditionIndex: number) {
+function businessRuleValueChanged(
+  changed: ChangeEvent,
+  ruleIndex: number,
+  conditionIndex: number
+) {
   const newValue = changed.detail.value;
   const rule = stepStore.accessList.rules[ruleIndex];
-  Object.assign(rule.conditions[Object.keys(rule.conditions)[0] as Condition]![conditionIndex], { value: newValue });
+  Object.assign(
+    rule.conditions[Object.keys(rule.conditions)[0] as Condition]![
+      conditionIndex
+    ],
+    { value: newValue }
+  );
 }
 </script>
 
 <template>
   <ContentCard v-model="valid">
     <template #title> 5. Define the business rules </template>
-    <template #subtitle>You can create a rule to assign this permission automatically to the user.</template>
+    <template #subtitle
+      >You can create a rule to assign this permission automatically to the
+      user.</template
+    >
     <template #default>
       <div class="content">
         <section class="explanation">
@@ -98,11 +125,17 @@ function businessRuleValueChanged(changed: ChangeEvent, ruleIndex: number, condi
                 </div>
                 <div class="abbrevation">
                   <s><p class="bold">NCP UAS -</p></s>
-                  <s><p>Nordic Customer Portal User Authorisation Service list</p></s>
+                  <s
+                    ><p>
+                      Nordic Customer Portal User Authorisation Service list
+                    </p></s
+                  >
                 </div>
                 <div class="abbrevation">
                   <s><p class="bold">User property -</p></s>
-                  <s><p>user property, such as country or office location</p></s>
+                  <s
+                    ><p>user property, such as country or office location</p></s
+                  >
                 </div>
                 <div class="abbrevation">
                   <s><p class="bold">Time window -</p></s>
@@ -122,36 +155,40 @@ function businessRuleValueChanged(changed: ChangeEvent, ruleIndex: number, condi
                   Azure > pn.administration + Time window > 09:00 - 18:00
                 </p>
                 <p>
-                  This means that the rule permits all users in the Azure group pn-administration during the time window
-                  9-18.
+                  This means that the rule permits all users in the Azure group
+                  pn-administration during the time window 9-18.
                 </p>
               </div>
             </div>
           </div>
         </section>
-        <section class="create-rule" v-for="(rule, ruleIndex) in accessList.rules" :key="ruleIndex">
+        <section
+          class="create-rule"
+          v-for="(rule, ruleIndex) in accessList.rules"
+          :key="ruleIndex"
+        >
           <header class="rule-header">
             <h3>Rule {{ ruleIndex + 1 }}</h3>
-            <pn-button
+            <button
               v-if="ruleIndex !== 0"
-              icon='<svg class="pn-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" fill-rule="evenodd" d="M4.293 4.293a1 1 0 0 1 1.414 0L12 10.586l6.293-6.293a1 1 0 1 1 1.414 1.414L13.414 12l6.293 6.293a1 1 0 0 1-1.414 1.414L12 13.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L10.586 12 4.293 5.707a1 1 0 0 1 0-1.414" clip-rule="evenodd"/></svg>'
-              appearance="light"
-              variant="borderless"
               style="align-self: center; width: fit-content"
-              small
-              tooltip="Remove rule"
               @click="stepStore.removeRule(ruleIndex)"
-            />
+            >
+              Remove rule
+            </button>
           </header>
-          <div class="condition-selector" @selectOption="(event: ChangeEvent) => conditionChanged(event, ruleIndex)">
+          <div
+            class="condition-selector"
+            @selectOption="(event: ChangeEvent) => conditionChanged(event, ruleIndex)"
+          >
             <p>If</p>
-            <pn-select :value="Object.keys(rule.conditions)[0]" :key="ruleIndex">
-              <pn-option
+            <select :value="Object.keys(rule.conditions)[0]" :key="ruleIndex">
+              <option
                 v-for="condition in AVAILABLE_CONDITIONS"
                 :label="AVAILABLE_CONDITIONS_MAP[condition as keyof typeof AVAILABLE_CONDITIONS_MAP]"
                 :value="condition"
-              ></pn-option>
-            </pn-select>
+              ></option>
+            </select>
             <p>of the conditions are met</p>
           </div>
           <div class="business-rules">
@@ -172,59 +209,45 @@ function businessRuleValueChanged(changed: ChangeEvent, ruleIndex: number, condi
                   v-if="businessRule.fact === 'AZURE_GROUP'"
                   @selectOption="(event: ChangeEvent) => businessRuleValueChanged(event, ruleIndex, businessRuleIndex)"
                 />
-                <pn-button
+                <button
                   v-if="businessRuleIndex !== 0"
-                  icon='<svg class="pn-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" fill-rule="evenodd" d="M4.293 4.293a1 1 0 0 1 1.414 0L12 10.586l6.293-6.293a1 1 0 1 1 1.414 1.414L13.414 12l6.293 6.293a1 1 0 0 1-1.414 1.414L12 13.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L10.586 12 4.293 5.707a1 1 0 0 1 0-1.414" clip-rule="evenodd"/></svg>'
-                  appearance="light"
-                  variant="borderless"
                   style="align-self: center; width: fit-content"
-                  small
-                  tooltip="Remove condition"
-                  @click="stepStore.removeCondition(ruleIndex, businessRuleIndex)"
-                />
+                  @click="
+                    stepStore.removeCondition(ruleIndex, businessRuleIndex)
+                  "
+                >
+                  Remove condition
+                </button>
               </div>
-              <pn-icon
-                v-if="businessRules(rule).length > 1 && businessRuleIndex !== businessRules(rule).length - 1"
-                icon='<svg class="pn-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" fill-rule="evenodd" d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1" clip-rule="evenodd"/></svg>'
-                color="gray900"
-                style="margin-top: 2rem"
-              />
+              <svg
+                class="pn-icon-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="#000"
+                  fill-rule="evenodd"
+                  d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1"
+                  clip-rule="evenodd"
+                />
+              </svg>
             </div>
             <div class="rule-condition-actions">
-              <pn-button
-                icon='<svg class="pn-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" fill-rule="evenodd" d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1" clip-rule="evenodd"/></svg>'
-                appearance="light"
-                variant="borderless"
-                small
-                left-icon
+              <button
                 style="width: fit-content"
                 @click="stepStore.addCondition(ruleIndex)"
-                >Add condition</pn-button
               >
-              <pn-button
-                icon='<svg class="pn-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" fill-rule="evenodd" d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1" clip-rule="evenodd"/></svg>'
-                appearance="light"
-                variant="borderless"
-                small
-                left-icon
-                style="width: fit-content"
-                @click="stepStore.addRule()"
-                >Add rule</pn-button
-              >
-              <pn-button
-                icon='<svg class="pn-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" fill-rule="evenodd" d="M4.001 7a1 1 0 0 1 1-1h.009a1 1 0 0 1 0 2h-.009a1 1 0 0 1-1-1M8 7a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1m-3.999 5a1 1 0 0 1 1-1h.009a1 1 0 1 1 0 2h-.009a1 1 0 0 1-1-1M8 12a1 1 0 0 1 1-1h10a1 1 0 0 1 0 2H9a1 1 0 0 1-1-1M4 16.999a1 1 0 0 1 1-1h.001a1 1 0 1 1 0 2h-.001a1 1 0 0 1-1-1M8 17a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1" clip-rule="evenodd"/></svg>'
-                appearance="light"
-                variant="borderless"
-                small
-                left-icon
-                @click="modalOpen = true"
-                >Show list of users</pn-button
-              >
+                Add condition
+              </button>
+              <button style="width: fit-content" @click="stepStore.addRule()">
+                Add rule
+              </button>
+              <button @click="modalOpen = true">Show list of users</button>
             </div>
           </div>
         </section>
       </div>
-      <ListUsersModal v-model="modalOpen" @close="modalOpen = false" />
     </template>
   </ContentCard>
 </template>

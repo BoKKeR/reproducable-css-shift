@@ -13,14 +13,12 @@
     "json-rules-engine": "^6.5.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
-    "pn-design-assets": "^1.8.1",
     "single-spa-vue": "^3.0.0",
     "vite-plugin-single-spa": "^0.7.0",
     "vue": "^3.4.21",
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@postnord/web-components": "^6.1.4",
     "@vitejs/plugin-vue": "^5.0.5",
     "sass": "^1.77.5",
     "typescript": "^5.2.2",

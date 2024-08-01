@@ -9,7 +9,10 @@ import KeyIcon from '../components/icons/KeyIcon.vue';
 const stepStore = useStepStore();
 const { accessList, currentStep } = storeToRefs(stepStore);
 
-const getClass = computed(() => (step: number) => currentStep.value >= step ? 'previewing' : 'not-previewing');
+const getClass = computed(
+  () => (step: number) =>
+    currentStep.value >= step ? 'previewing' : 'not-previewing'
+);
 </script>
 
 <template>
@@ -18,13 +21,18 @@ const getClass = computed(() => (step: number) => currentStep.value >= step ? 'p
     <div class="tile">
       <KeyIcon />
       <div class="preview-access-list">
-        <span :class="getClass(2)">{{ accessList.access_list.system.name || 'system' }}</span>
+        <span :class="getClass(2)">{{
+          accessList.access_list.system.name || 'system'
+        }}</span>
         <span :class="getClass(3)">.</span>
         <span :class="getClass(3)">{{
-          accessList.access_list.resource?.map((r) => r.name)?.join('.') || 'resource'
+          accessList.access_list.resource?.map((r) => r.name)?.join('.') ||
+          'resource'
         }}</span>
         <span :class="getClass(4)">.</span>
-        <span :class="getClass(4)">{{ accessList.access_list.action.name || 'action' }}</span>
+        <span :class="getClass(4)">{{
+          accessList.access_list.action.name || 'action'
+        }}</span>
       </div>
     </div>
   </div>
@@ -38,7 +46,7 @@ const getClass = computed(() => (step: number) => currentStep.value >= step ? 'p
 }
 
 label {
-  color: $gray700;
+  color: gray;
 }
 
 .tile {
@@ -46,7 +54,7 @@ label {
   gap: 1rem;
   padding: 1rem 2rem 1rem 2rem;
   border-radius: 8px;
-  background-color: $gray50;
+  background-color: lightgray;
   width: max-content;
 }
 
@@ -56,10 +64,10 @@ label {
 }
 
 .previewing {
-  color: $gray900;
+  color: gray;
 }
 
 .not-previewing {
-  color: $gray200;
+  color: lightgrey;
 }
 </style>
